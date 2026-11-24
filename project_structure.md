@@ -51,6 +51,7 @@ guage/
     strkey/
       {address,checksum,seed}.go           # SEP-23 classify, CRC16 and seed detection (2.2)
       {address_test,fuzz_test}.go          # SEP-23 vectors, shape and sentinel tests; FuzzClassify
+      {canonical_test,seed_test,version_test}.go # canonical spellings, no-echo seed detection and independent version boundaries (7.74 to 7.76)
     threshold/
       {threshold,threshold_test}.go       # authorization math as verified in 0.7 (2.3)
       cap_test.go                         # the 20-signature envelope cap at its boundary, largest weights kept (7.29)
