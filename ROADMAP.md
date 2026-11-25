@@ -1,6 +1,6 @@
 # ROADMAP: Gauge
 
-Last updated: 2026-11-25T10:30Z (tasks 7.84 to 7.86: strkey seed, canonical and version boundaries pinned)
+Last updated: 2026-11-25T10:33Z (tasks 7.84 to 7.86: strkey seed, canonical and version boundaries pinned)
 Roadmap version: 3
 
 This file is the single source of truth for remaining work. It is read before every task and updated after every change.
@@ -40,7 +40,7 @@ The repository is 100% ready when every task in Phases 0 to 6 is done and every 
 | 4 | Dogfood and release v0.1.0 | 4 | 9 | 44% |
 | 5 | v0.2 features | 10 | 11 | 90% |
 | 6 | Release v0.2.0 and community | 3 | 5 | 60% |
-| 7 (backlog) | Backlog | 76 | 80 | 95% |
+| 7 (backlog) | Backlog | 79 | 83 | 95% |
 | **Phases 0 to 6** | **Readiness total** | **72** | **80** | **90%** |
 | Gates | G1 to G10 | 8 | 10 | 80% |
 <!-- PROGRESS:END -->
@@ -303,6 +303,9 @@ Constraint on the two remaining experimental tasks: Gauge never builds or submit
 - [x] **7.75** test(policy): scan shipped policies for seed-shaped tokens. S. Deps: none. Done when: `internal/policy/example_seed_test.go` scans `gauge.example.toml` and every regular file under `testdata/policy` with both `containsSeed` and a byte scan, and fails if fewer than two paths are found. (done 2026-11-25: the shipped example and `.gitkeep` are both scanned; a temporary shape-only fixture triggered both checks and was removed.)
 - [x] **7.76** test(source): prove the Horizon client never follows redirects. S. Deps: none. Done when: `internal/source/redirect_test.go` serves a 302 from one listener to a second, exercises both `Account` and `Network`, asserts `ErrStatus`, one source request per operation, zero target requests, and no redirect target in either error. (done 2026-11-25: the test passed; temporarily removing `CheckRedirect` made both operations follow the redirect and the test fail, then the guard was restored.)
 - [x] **7.77** test(source): pin integer-only Retry-After parsing and its cap. S. Deps: none. Done when: `internal/source/retry_after_test.go` directly tables empty, HTTP date, zero, negative, positive, capped and whitespace-padded values, asserts exact durations, non-negative returns and the `maxRetryAfter` ceiling. (done 2026-11-25.)
+- [x] **7.81** feat(cli): cancel an in-flight run on SIGINT and exit 3 (issue #211). M. Deps: none. Done when: `main` installs `signal.NotifyContext` for `os.Interrupt` and `syscall.SIGTERM` passed through `deps`; `check` and `audit` use it, falling back to background context; cancelled run exits 3 with empty stdout and one stderr line; `signal_test.go` verifies cancellation and normal completion report. (done 2026-11-24)
+- [x] **7.82** fix(cli): version rejects extra arguments instead of ignoring them (issue #212). S. Deps: none. Done when: `version` branch rejects extra arguments with message, usage text and exit 2; bare `version` and help flags unaffected; `version_args_test.go` tables dispatch cases. (done 2026-11-24)
+- [x] **7.83** test(cli): duplicate --endpoint values fail without echoing the URL (issue #213). S. Deps: none. Done when: `cmd/stellar-gauge/endpoint_flag_test.go` asserts exit 2 on duplicate endpoints, proves neither user:pass nor hostnames are echoed in stdout or stderr across two- and three-endpoint cases, and verifies named public endpoints on missing endpoint. (done 2026-11-24)
 - [x] **7.84** test(strkey): pin seed detection on truncated and corrupted seeds, and prove no error carries the value out. S. Deps: none. Done when: `internal/strkey/seed_test.go` tables truncated, corrupted and non-seed inputs against `IsSeed` and asserts the error text never quotes the input.
 - [x] **7.85** test(strkey): pin the exact sentinel for each non-canonical spelling, including the unused-bit form Go's base32 decoder discards. S. Deps: none. Done when: `internal/strkey/canonical_test.go` names the sentinel each spelling returns through `Classify`.
 - [x] **7.86** test(strkey): build every version and payload boundary with an encoder the implementation does not share. S. Deps: none. Done when: `internal/strkey/version_test.go` asserts the kind and payload rule for each boundary byte.
@@ -458,4 +461,5 @@ Newest first. One row per merged change.
 | 2026-10-28 | Owner-authorized scaffold: root brief copies, Go module, package and file placeholders, model and policy declarations, source interface, non-operational CLI, README/CONTRIBUTING/SECURITY/PR-template drafts, structure and decision documentation | 1.1, 1.4, 1.8, 1.10, 1.11, 1.12, D-01 to D-04, D-09, D-10 |
 | 2026-10-28 | First drafts of the full doc set (PRD, ARCHITECTURE, ESSENTIALS, project_structure, AGENTS, CLAUDE, ROADMAP) with a red-team pass | 0.1 |
 | 2026-11-25 | Added direct regression tests for shipped policy seed scanning, Horizon redirect refusal and the integer-only `Retry-After` parser. The redirect test was mutation-checked with `CheckRedirect` removed; the policy scan rejected a temporary shape-only fixture, which was removed. No production behavior changed. | 7.75, 7.76, 7.77 |
+| 2026-11-24 | Tasks 7.81, 7.82, 7.83 (close #211, close #212, close #213): install signal.NotifyContext in CLI main to cancel in-flight check and audit runs on SIGINT or SIGTERM and exit 3 with empty stdout and one stderr line; reject extra arguments on version with exit 2, error message and usage text; add duplicate endpoint test ensuring userinfo credentials and private hosts are never echoed in stderr or stdout. | 7.75, 7.76, 7.77 |
 | 2026-11-25 | Tasks 7.84 to 7.86 (closing #206, #207, #208): pin the strkey boundaries. The seed, canonical spelling and version tests build their inputs with an independent encoder, so a change to the shared one cannot move the expectation with it. |
