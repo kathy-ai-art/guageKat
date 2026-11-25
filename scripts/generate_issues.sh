@@ -167,9 +167,7 @@ backlog() {
     '7.71	type: test	area: sep1	test(sep1): record an oversized stellar.toml as StepSize, not a read' \
     '7.72	type: test	area: sep1	test(sep1): honour Retry-After on 429 and give up after the retry budget' \
     '7.73	type: test	area: sep1	test(sep1): classify NAT64, 6to4, carrier NAT and unique local addresses' \
-    '7.74	type: test	area: strkey	test(strkey): detect seeds without ever returning the input' \
-    '7.75	type: test	area: strkey	test(strkey): reject lowercase, padded and unused-bit variants' \
-    '7.76	type: security	area: strkey	security(strkey): check every version byte against an independent encoder' \
+    '7.74	type: test	area: model	test(model): fingerprint is the final SortFindings tiebreak' \
     'G1	type: test	area: rules	gate: every P0 requirement has passing tests' \
     'G2	type: test	area: rules	gate: every scenario has a fixture and expected findings' \
     'G3	type: test	area: cli	gate: fail-closed paths all exit non-zero' \

@@ -34,7 +34,9 @@ func NewFinding(ruleID string, severity Severity, account, message, evidence str
 }
 
 // SortFindings orders findings by severity, highest first, then account, then
-// rule ID. Equal keys keep the order they were found in so output is stable.
+// rule ID, then fingerprint ascending. The fingerprint is the final tiebreak,
+// so findings that tie on severity, account and rule order by their evidence
+// digest and output is the same no matter how the input was shuffled.
 func SortFindings(findings []Finding) {
 	sort.SliceStable(findings, func(i, j int) bool {
 		a, b := findings[i], findings[j]
@@ -44,7 +46,10 @@ func SortFindings(findings []Finding) {
 		if a.Account != b.Account {
 			return a.Account < b.Account
 		}
-		return a.RuleID < b.RuleID
+		if a.RuleID != b.RuleID {
+			return a.RuleID < b.RuleID
+		}
+		return a.Fingerprint < b.Fingerprint
 	})
 }
 

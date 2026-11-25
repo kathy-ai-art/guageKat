@@ -210,8 +210,17 @@ func TestSortFindingsIsStable(t *testing.T) {
 	second := model.NewFinding("sig-a", model.SevHigh, "acct-a", "second", "evidence two")
 	findings := []model.Finding{first, second}
 	model.SortFindings(findings)
-	if findings[0].Message != "first" || findings[1].Message != "second" {
-		t.Fatal("finding order among equal keys changed")
+	// Equal severity, account and rule: the order is set by fingerprint, not
+	// by the order the findings were handed in. Reversing the input must not
+	// change the output.
+	reversed := []model.Finding{second, first}
+	model.SortFindings(reversed)
+	if findings[0].Fingerprint != reversed[0].Fingerprint || findings[1].Fingerprint != reversed[1].Fingerprint {
+		t.Fatal("reversing the input changed the order among equal keys")
+	}
+	// Fingerprint ascending is the tiebreak.
+	if findings[0].Fingerprint > findings[1].Fingerprint {
+		t.Fatalf("equal-key findings are not in fingerprint order: %s > %s", findings[0].Fingerprint, findings[1].Fingerprint)
 	}
 }
 
