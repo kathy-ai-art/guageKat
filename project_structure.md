@@ -74,11 +74,14 @@ guage/
       config_test.go                       # loader tests, including that the shipped example policy loads (2.4)
       {endpoint_shape,syntax_position,empty_policy}_test.go # load boundary cases for base URLs, parse positions and empty declarations (7.65 to 7.67)
       {accept,roles,roles_keys,roles_mutation,seed_shape,home_domain}_test.go # acceptance refusals, 16x5 role-floor table, seed shape rejection, SEP-1 home domain labels and isolation (3.4, 7.54 to 7.56, 7.63, 7.64)
+      example_seed_test.go                 # scans the shipped example and policy fixtures for seed-shaped tokens (7.75)
       unknown_keys_test.go                 # one load names every unknown key, sorted, never a value (7.31)
     source/
       source.go                           # Source interface and the passphrase comparison
       {horizon,http,errors}.go             # Horizon client: caps, retries, strict decode (2.7)
       horizon_test.go                     # fake-server success and failure-mode tests (2.7)
+      redirect_test.go                    # separate listeners prove 302 responses never reach Location targets (7.76)
+      retry_after_test.go                 # direct integer-only Retry-After parser table and cap (7.77)
       compare.go                          # pure field-by-field comparison of two endpoints' readings, names only (5.1)
       compare_test.go                     # every compared field, order and run metadata ignored, existence, no values (5.1)
     sep1/
